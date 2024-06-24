@@ -1,0 +1,28 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  min-height: 100vh;
+  gap: 8px;
+  grid-template:
+    "old new" 33vh
+    "replace output" 2fr
+    / 1fr 50%;
+}
+#root {
+  display: contents;;
+}
+h1, h2 {
+  margin: 0;
+}

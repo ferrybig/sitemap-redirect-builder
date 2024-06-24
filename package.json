@@ -1,0 +1,36 @@
+{
+  "name": "sitemap-redirect-builder",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server",
+    "build": "npm run build:client && npm run build:server && npm run build:ssg",
+    "build:client": "vite build --outDir dist/client",
+    "build:server": "vite build --ssr src/entry-server.ts --outDir dist/server",
+    "build:ssg": "node prerender",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview --outDir dist/static"
+  },
+  "dependencies": {
+    "babel-plugin-react-compiler": "^0.0.0-experimental-938cd9a-20240601",
+    "eslint-plugin-react-compiler": "^0.0.0-experimental-51a85ea-20240601",
+    "express": "^4.19.2",
+    "fast-xml-parser": "^4.4.0",
+    "react": "^19.0.0-rc-c21bcd627b-20240624",
+    "react-dom": "^19.0.0-rc-c21bcd627b-20240624"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.5",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}

@@ -1,0 +1,11 @@
+.sitemap {
+  display: grid;
+  grid-template-rows: 48px 1fr 48px;
+}
+.sitemap textarea {
+  resize: none;
+}
+.output {
+  display: grid;
+  grid-template-rows: 48px 1fr;
+}
