@@ -1,0 +1,31 @@
+.root {
+	position: absolute;
+	bottom: 8px;
+	right: 8px;
+	width: 400px;
+	font-size: 2em;
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+	border-radius: 4px;
+	background-color: lightgrey;
+	color: grey;
+	border: 1px solid grey;
+	padding: 8px;
+}
+.rootEnabled {
+	composes: root;
+	background-color: rgb(86, 187, 221);
+	color: black;
+	border-color: black;
+	cursor: pointer;
+}
+.rootEnabled:hover {
+	background-color: lightblue;
+}
+.title {
+
+}
+.subTitle {
+	font-size: 0.75em;
+}

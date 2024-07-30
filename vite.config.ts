@@ -5,16 +5,19 @@ import react from '@vitejs/plugin-react'
 const ReactCompilerConfig = { /* ... */ };
 
 export default defineConfig(() => {
-  return {
-    plugins: [
-      react({
-        babel: {
-          plugins: [
-            ["babel-plugin-react-compiler", ReactCompilerConfig],
-          ],
-        },
-      }),
-    ],
-    base: './',
-  }
+	return {
+		plugins: [
+			react({
+				babel: {
+					plugins: [
+						['babel-plugin-react-compiler', ReactCompilerConfig],
+					],
+				},
+			}),
+		],
+		base: './',
+		worker: {
+			format: 'es' as const
+		}
+	}
 })

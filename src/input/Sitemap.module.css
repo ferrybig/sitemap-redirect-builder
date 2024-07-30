@@ -1,0 +1,19 @@
+.textarea {
+	width: 100%;
+	box-sizing: border-box;
+	white-space: pre;
+	flex: 1;
+}
+.error {
+	composes: noMargin from '../global.module.css';
+	color: red;
+}
+.info {
+	composes: noMargin from '../global.module.css';
+}
+.title {
+	composes: noMargin from '../global.module.css';
+}
+.subTitle {
+	composes: noMargin from '../global.module.css';
+}

@@ -1,0 +1,23 @@
+.table {
+	width: 100%;
+}
+.from {
+	width: auto;
+}
+.to {
+	width: 100%;
+}
+.subTitle {
+	composes: noMargin from '../global.module.css';
+}
+.info {
+	height: 200px;
+	background: lightgreen;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.warning {
+	composes: info;
+	background: lightgoldenrodyellow;
+}

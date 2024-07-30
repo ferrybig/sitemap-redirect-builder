@@ -14,5 +14,16 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    '@typescript-eslint/indent': [
+      'warn',
+      'tab',
+      {
+        flatTernaryExpressions: true
+      }
+    ],
+    '@typescript-eslint/quotes': [
+      'warn',
+      'single'
+    ]
   },
 }

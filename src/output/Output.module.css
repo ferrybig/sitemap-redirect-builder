@@ -1,0 +1,48 @@
+.output {
+	width: calc(100% - 8px);
+	flex: 1;
+}
+.fullScreenSection {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+.outputSelector {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	padding: none;
+	gap: 8px;
+}
+.outputSelectorItem {
+	width: 256px;
+	display: flex;
+}
+.outputSelectorTile {
+	composes: noMargin from '../global.module.css';
+	width: 256px;
+	display: grid;
+	grid-template-rows: 256px auto;
+	border: 1px solid grey;
+	border-radius: 24px;
+	background: white;
+	list-style: none;
+	text-align: center;
+	cursor: pointer;
+}
+.outputSelectorTileName {
+	grid-row: 2;
+	font-weight: bold;
+}
+.outputSelectorTile:hover{
+	background: lightgrey;
+}
+.outputSelectorTileImage {
+	background-size: 256px 256px;
+}
+.warning {
+	composes: noMargin from '../global.module.css';
+}
+.subTitle {
+	composes: noMargin from '../global.module.css';
+}

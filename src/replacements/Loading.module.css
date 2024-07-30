@@ -1,0 +1,20 @@
+.root {
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	background: white;
+	border: 1px solid black;
+	border-bottom: none;
+	padding: 4px 8px;
+	z-index: 1;
+	text-align: center;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+}
+.title,.subTitle {
+	display: block;;
+}
+.title {
+	font-weight: bold;
+}
