@@ -1,156 +1,191 @@
-import { Ref, useDeferredValue, useRef, useState } from 'react'
+import { useDeferredValue, useRef, useState } from 'react'
 import parseSitemap from './input/parseSitemap'
 import Replacements from './replacements/Replacements'
 import { Replacement, Sitemap as SitemapType } from './types'
 import Output from './output/Output'
 import classes from './App.module.css'
 import Sitemap from './input/Sitemap'
-import NextSectionButton from './components/NextSectionButton'
 import ReplacementSuggestions from './replacements/ReplacementSuggestions'
+import Header from './components/Header'
+import Section from './components/Section'
+import Icon from './components/Icon'
 
-interface AppLogic {
-	parsedOldSitemap: SitemapType
-	parsedNewSitemap: SitemapType
-	thirdSectionRef: Ref<HTMLDivElement>
+function analyse(oldSitemap: SitemapType, newSitemap: SitemapType, replacements: Replacement[]) {
+	const newUrls = new Set(newSitemap.urls);
+	const requiredUrls = oldSitemap.urls.filter((oldUrl) => !newUrls.has(oldUrl));
+	const requiredSet = new Set(requiredUrls);
+	const mapped = new Set(replacements.map((replacement) => replacement.from));
+	const missingUrls = requiredUrls.filter((requiredUrl) => !mapped.has(requiredUrl));
+	const unmatchedReplacements = replacements.filter((replacement) => !requiredSet.has(replacement.from));
+	return { requiredUrls, missingUrls, unmatchedReplacements };
 }
-function AppLogic({
-	parsedNewSitemap,
-	parsedOldSitemap,
-	thirdSectionRef,
-}: AppLogic) {
 
-	const fourthSectionRef = useRef<HTMLDivElement>(null);
-	const [replacements, setReplacements] = useState<Replacement[]>([])
-	const requiredUrls = parsedOldSitemap.urls.filter(
-		(oldUrl) => !parsedNewSitemap.urls.find((newUrl) => newUrl === oldUrl)
-	);
-	const missingUrls = requiredUrls.filter(
-		(requiredUrl) =>
-			!replacements.find(
-				(replacement) => replacement.from === requiredUrl
-			)
-	);
-	const unmatchedReplacements = replacements.filter(
-		(replacement) =>
-			!requiredUrls.find((oldUrl) => oldUrl === replacement.from)
-	);
-
-	const stage =
-	parsedOldSitemap.type === 'error' ? 1 :
-	parsedNewSitemap.type === 'error' ? 2 :
-	missingUrls.length !== 0 ? 3 :
-	4
-
-	return (
-		<>
-			<div className={stage < 3 ? classes.sectionInactive : classes.section} ref={thirdSectionRef}>
-				<h2>3. Replacements</h2>
-				<Replacements
-					requiredUrls={requiredUrls}
-					unmatchedReplacements={unmatchedReplacements}
-					newSitemap={parsedNewSitemap}
-					replacements={replacements}
-					onChange={setReplacements}
-				/>
-				<NextSectionButton nextRef={fourthSectionRef} enabled={stage >= 4}>
-					view generated output
-				</NextSectionButton>
-			</div>
-			<div className={stage < 4 ? classes.outputInactive : classes.output} ref={fourthSectionRef}>
-				<h2>4. Output</h2>
-				<Output missingUrls={missingUrls} replacements={replacements}/>
-			</div>
-		</>
-	)
+function plural(count: number, word: string) {
+	return `${count} ${word}${count === 1 ? '' : 's'}`;
 }
+
 function App() {
 	const [oldSitemap, setOldSitemap] = useState('')
 	const [newSitemap, setNewSitemap] = useState('')
-	const firstSection = useRef<HTMLDivElement>(null);
-	const secondSection = useRef<HTMLDivElement>(null);
-	const thirdSection = useRef<HTMLDivElement>(null);
+	const [replacements, setReplacements] = useState<Replacement[]>([])
+	const oldSection = useRef<HTMLElement>(null);
+	const newSection = useRef<HTMLElement>(null);
+	const replacementsSection = useRef<HTMLElement>(null);
+	const outputSection = useRef<HTMLElement>(null);
 
 	const parsedOldSitemap = parseSitemap(oldSitemap);
 	const parsedNewSitemap = parseSitemap(newSitemap);
 
-	const stage =
-		parsedOldSitemap.type === 'error' ? 1 :
-		parsedNewSitemap.type === 'error' ? 2 :
-		3
+	// Rendering a large list of replacement rows can be slow, so the parts that depend on the sitemaps
+	// are rendered with a deferred copy, keeping the text areas responsive while typing
+	const deferredOldSitemap = useDeferredValue(parsedOldSitemap);
+	const deferredNewSitemap = useDeferredValue(parsedNewSitemap);
+	const isLoading = deferredOldSitemap !== parsedOldSitemap || deferredNewSitemap !== parsedNewSitemap;
 
-	const appLogic = (
+	const { requiredUrls, missingUrls, unmatchedReplacements } = analyse(deferredOldSitemap, deferredNewSitemap, replacements);
 
-		<AppLogic
-			parsedNewSitemap={parsedNewSitemap}
-			parsedOldSitemap={parsedOldSitemap}
-			thirdSectionRef={thirdSection}
-		/>
-	)
-	const appLogicDeferred = useDeferredValue(appLogic);
-	const isLoading = appLogic !== appLogicDeferred;
+	const sitemapsReady = deferredOldSitemap.type === 'success' && deferredNewSitemap.type === 'success';
+	const mappingDone = sitemapsReady && missingUrls.length === 0;
 
 	return (
 		<>
-			<div className={classes.titleSection}>
-				<img src='./favicon.svg' width={400} height={400} alt=""/>
-				<div>
-					<h1>Sitemap redirect builder</h1>
-					<p>Provides redirect scripts for common http server. To use this tool provide your old and new sitemaps, then define replacements for the missing url's from the new sitemap</p>
+			<Header
+				steps={[
+					{
+						label: 'Old sitemap',
+						detail: parsedOldSitemap.type === 'success' ? plural(parsedOldSitemap.urls.length, 'URL') : 'Not provided',
+						done: parsedOldSitemap.type === 'success',
+						targetRef: oldSection,
+					},
+					{
+						label: 'New sitemap',
+						detail: parsedNewSitemap.type === 'success' ? plural(parsedNewSitemap.urls.length, 'URL') : 'Not provided',
+						done: parsedNewSitemap.type === 'success',
+						targetRef: newSection,
+					},
+					{
+						label: 'Map URLs',
+						detail: sitemapsReady ? `${requiredUrls.length - missingUrls.length} of ${requiredUrls.length} mapped` : 'Waiting for sitemaps',
+						done: mappingDone,
+						targetRef: replacementsSection,
+					},
+					{
+						label: 'Export',
+						detail: mappingDone ? 'Ready' : 'Not ready yet',
+						done: false,
+						targetRef: outputSection,
+					},
+				]}
+			/>
+			<main className={classes.main} id="top">
+				<div className={classes.hero}>
+					<div className={classes.heroText}>
+						<h1 className={classes.heroTitle}>Keep every old link working after a site migration</h1>
+						<p className={classes.heroLead}>
+							Paste the sitemaps of your old and new website. This tool finds the URLs that disappeared,
+							suggests where they should go, and generates redirect rules for your web server.
+						</p>
+						<ul className={classes.heroFeatures}>
+							<li><Icon name="shield"/> Runs entirely in your browser</li>
+							<li><Icon name="sparkles"/> Smart replacement suggestions</li>
+							<li><Icon name="server"/> Apache, Nginx, Caddy &amp; JSON output</li>
+						</ul>
+					</div>
+					<img className={classes.heroImage} src="./favicon.svg" width={400} height={400} alt=""/>
 				</div>
-				<NextSectionButton nextRef={firstSection} enabled>
-					Provide original sitemap
-				</NextSectionButton>
-			</div>
-			<div className={classes.section} ref={firstSection}>
-				<h2>1. Old sitemap</h2>
-				<Sitemap
-					label='Provide the old sitemap here'
-					parsedSitemap={parsedOldSitemap}
-					setSitemap={setOldSitemap}
-					sitemap={oldSitemap}
-					exampleIndex={0}
-				/>
-				<NextSectionButton nextRef={secondSection} enabled={stage >= 2}>
-					Provide updated sitemap
-				</NextSectionButton>
-			</div>
-			<div className={stage < 2 ? classes.sectionInactive : classes.section} ref={secondSection}>
-				<h2>2. New sitemap</h2>
-				<Sitemap
-					label='Provide the new sitemap here'
-					parsedSitemap={parsedNewSitemap}
-					setSitemap={setNewSitemap}
-					sitemap={newSitemap}
-					exampleIndex={1}
-				/>
-				<NextSectionButton nextRef={thirdSection} enabled={stage >= 3}>
-					Define replacement
-				</NextSectionButton>
-			</div>
-			<div className={classes.logicHolder}>
-				<div className={isLoading ? classes.loading : undefined}/>
+
+				<div className={classes.inputs}>
+					<Section
+						sectionRef={oldSection}
+						step={1}
+						title="Old sitemap"
+						description="The sitemap of the website that is live today."
+						done={parsedOldSitemap.type === 'success'}
+					>
+						<Sitemap
+							label="Old sitemap XML"
+							parsedSitemap={parsedOldSitemap}
+							setSitemap={setOldSitemap}
+							sitemap={oldSitemap}
+							exampleIndex={0}
+						/>
+					</Section>
+					<Section
+						sectionRef={newSection}
+						step={2}
+						title="New sitemap"
+						description="The sitemap of the website you are about to deploy."
+						done={parsedNewSitemap.type === 'success'}
+					>
+						<Sitemap
+							label="New sitemap XML"
+							parsedSitemap={parsedNewSitemap}
+							setSitemap={setNewSitemap}
+							sitemap={newSitemap}
+							exampleIndex={1}
+						/>
+					</Section>
+				</div>
+
 				<ReplacementSuggestions
 					newSitemap={parsedNewSitemap}
 					oldSitemap={parsedOldSitemap}
 				>
-					{appLogicDeferred}
+					<div className={isLoading ? classes.resultsLoading : classes.results} aria-busy={isLoading}>
+						<Section
+							sectionRef={replacementsSection}
+							step={3}
+							title="Map missing URLs"
+							description="Choose where each URL that no longer exists should point to."
+							done={mappingDone}
+						>
+							<Replacements
+								sitemapsReady={sitemapsReady}
+								requiredUrls={requiredUrls}
+								missingUrls={missingUrls}
+								unmatchedReplacements={unmatchedReplacements}
+								newSitemap={deferredNewSitemap}
+								replacements={replacements}
+								onChange={setReplacements}
+							/>
+						</Section>
+						<Section
+							sectionRef={outputSection}
+							step={4}
+							title="Export redirect rules"
+							description="Pick your web server and copy the generated configuration."
+						>
+							<Output
+								sitemapsReady={sitemapsReady}
+								missingUrls={missingUrls}
+								replacements={replacements}
+							/>
+						</Section>
+					</div>
 				</ReplacementSuggestions>
-			</div>
-			<div className={classes.footer}>
+				{isLoading && (
+					<div className={classes.toast} role="status">
+						<span className={classes.spinner} aria-hidden/>
+						Computing differences…
+					</div>
+				)}
+			</main>
+			<footer className={classes.footer}>
 				<p>
+					<Icon name="github"/>
+					{' '}
 					This website is open source:
 					{' '}
-					<a href='https://github.com/ferrybig/sitemap-redirect-builder'>ferrybig/sitemap-redirect-builder</a>
-					.
+					<a href="https://github.com/ferrybig/sitemap-redirect-builder">ferrybig/sitemap-redirect-builder</a>
 				</p>
 				<p>
 					The icons in the output section come from
 					{' '}
-					<a href='https://github.com/vscode-icons/vscode-icons'>vscode-icons/vscode-icons</a>
+					<a href="https://github.com/vscode-icons/vscode-icons">vscode-icons/vscode-icons</a>
 					{' '}
-					and are licensed under the MIT license
+					and are licensed under the MIT license.
 				</p>
-			</div>
+			</footer>
 		</>
 	)
 }

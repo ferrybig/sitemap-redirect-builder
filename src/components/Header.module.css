@@ -1,0 +1,150 @@
+.root {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	height: var(--header-height);
+	background: color-mix(in srgb, var(--surface) 82%, transparent);
+	backdrop-filter: saturate(1.6) blur(12px);
+	-webkit-backdrop-filter: saturate(1.6) blur(12px);
+	border-bottom: 1px solid var(--border);
+}
+.inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	height: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 24px;
+}
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--text);
+	text-decoration: none;
+	font-weight: 650;
+	letter-spacing: -0.01em;
+	white-space: nowrap;
+	border-radius: var(--radius-sm);
+}
+.brand:hover {
+	color: var(--text);
+}
+.brand img {
+	border-radius: 7px;
+	box-shadow: var(--shadow-sm);
+}
+
+.steps {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.stepItem {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+.stepItem + .stepItem::before {
+	content: '';
+	width: 16px;
+	height: 1px;
+	background: var(--border-strong);
+}
+
+.step {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 10px 6px 6px;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	background: none;
+	text-align: left;
+	cursor: pointer;
+	color: var(--text-muted);
+	transition: background-color 120ms;
+}
+.step:hover {
+	background: var(--surface-2);
+}
+.stepIndicator {
+	display: grid;
+	place-items: center;
+	width: 26px;
+	height: 26px;
+	flex: none;
+	border-radius: 50%;
+	border: 1px solid var(--border-strong);
+	background: var(--surface);
+	font-size: 0.8125rem;
+	font-weight: 700;
+}
+.stepText {
+	display: flex;
+	flex-direction: column;
+	line-height: 1.2;
+}
+.stepLabel {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--text);
+}
+.stepDetail {
+	font-size: 0.75rem;
+	color: var(--text-subtle);
+	white-space: nowrap;
+}
+
+.stepCurrent {
+	composes: step;
+	background: var(--accent-soft);
+	border-color: var(--accent-border);
+}
+.stepCurrent:hover {
+	background: var(--accent-soft);
+}
+.stepCurrent .stepIndicator {
+	background: var(--accent);
+	border-color: var(--accent);
+	color: var(--accent-contrast);
+}
+
+.stepDone {
+	composes: step;
+}
+.stepDone .stepIndicator {
+	background: var(--success-soft);
+	border-color: var(--success-border);
+	color: var(--success);
+}
+
+@media (max-width: 1080px) {
+	.stepDetail {
+		display: none;
+	}
+}
+@media (max-width: 860px) {
+	.brandName {
+		display: none;
+	}
+}
+@media (max-width: 620px) {
+	.inner {
+		padding: 0 16px;
+	}
+	.stepText {
+		display: none;
+	}
+	.step {
+		padding: 4px;
+	}
+	.stepItem + .stepItem::before {
+		width: 10px;
+	}
+}

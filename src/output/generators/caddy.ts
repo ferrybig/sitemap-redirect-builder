@@ -3,6 +3,7 @@ import src from './caddy-svgrepo-com.svg'
 
 export default {
 	name: 'Caddy',
+	fileName: 'Caddyfile',
 	image: {
 		src,
 		pos: null,
