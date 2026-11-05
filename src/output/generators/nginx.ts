@@ -3,6 +3,7 @@ import image from './nginx-svgrepo-com.svg'
 
 export default {
 	name: 'Nginx',
+	fileName: 'redirects.conf',
 	image: {
 		src: image,
 		pos: null

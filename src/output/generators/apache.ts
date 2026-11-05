@@ -10,6 +10,7 @@ function escapeOutput(input: string) {
 
 export default {
 	name: 'Apache',
+	fileName: '.htaccess',
 	image: {
 		pos: null,
 		src

@@ -1,19 +1,120 @@
-.textarea {
-	width: 100%;
-	box-sizing: border-box;
-	white-space: pre;
+.root {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 	flex: 1;
 }
-.error {
-	composes: noMargin from '../global.module.css';
-	color: red;
+.toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	flex-wrap: wrap;
 }
-.info {
-	composes: noMargin from '../global.module.css';
+.label {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--text-muted);
 }
-.title {
-	composes: noMargin from '../global.module.css';
+.actions {
+	display: flex;
+	gap: 6px;
 }
-.subTitle {
-	composes: noMargin from '../global.module.css';
+
+.textarea {
+	width: 100%;
+	height: 260px;
+	min-height: 140px;
+	resize: vertical;
+	padding: 12px 14px;
+	border-radius: var(--radius);
+	border: 1px solid var(--border-strong);
+	background: var(--surface-2);
+	color: var(--text);
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	line-height: 1.6;
+	white-space: pre;
+	overflow: auto;
+	tab-size: 4;
+	transition: border-color 120ms, background-color 120ms, box-shadow 120ms;
+}
+.textarea::placeholder {
+	color: var(--text-subtle);
+	opacity: 0.7;
+}
+.textarea:hover {
+	border-color: var(--text-subtle);
+}
+.textarea:focus {
+	outline: none;
+	background: var(--surface);
+	border-color: var(--accent);
+	box-shadow: var(--focus-ring);
+}
+.textareaError {
+	composes: textarea;
+	border-color: var(--danger);
+}
+
+.status {
+	min-height: 24px;
+	font-size: 0.875rem;
+}
+.statusLine {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+.statusLine > svg {
+	flex: none;
+}
+.statusHint {
+	composes: statusLine;
+	color: var(--text-subtle);
+}
+.statusError {
+	composes: statusLine;
+	color: var(--danger);
+	font-weight: 500;
+}
+.statusSuccess {
+	composes: statusLine;
+	color: var(--success);
+	font-weight: 600;
+	cursor: pointer;
+	list-style: none;
+	width: fit-content;
+	border-radius: 4px;
+}
+.statusSuccess::-webkit-details-marker {
+	display: none;
+}
+.showUrls {
+	margin-left: 4px;
+	color: var(--text-subtle);
+	font-weight: 500;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+.showUrls::after {
+	content: 'Show';
+}
+.urls[open] .showUrls::after {
+	content: 'Hide';
+}
+.urlList {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	max-height: 180px;
+	overflow: auto;
+	margin: 8px 0 0;
+	padding: 8px 12px;
+	list-style: none;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-sm);
+	background: var(--surface-2);
+	font-size: 0.8125rem;
+	color: var(--text-muted);
 }

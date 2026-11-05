@@ -24,6 +24,7 @@ export interface OutputGeneratorImage {
 }
 export interface OutputGenerator {
 	readonly name: string,
+	readonly fileName?: string,
 	readonly image: OutputGeneratorImage | null,
 	readonly generateOutput: (list: Replacement[]) => string
 }

@@ -1,49 +1,198 @@
 .root {
-	border-left: 8px rgb(86, 187, 221) double;
-	padding-left: 4px;
-	margin: 8px 0;
-}
-.needAttention {
-	composes: root;
-	border-left-color: red;
-}
-.root:focus {
-	border-left-color: blue
-}
-.root:hover {
-	background-color: rgba(127, 127, 127, 0.1)
-}
-.suggestions {
+	position: relative;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-end;
+	gap: 12px;
+	padding: 14px 16px 16px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: var(--surface);
+	transition: border-color 150ms, box-shadow 150ms;
 }
-.option {
-	composes: noMargin from '../global.module.css';
-	display: grid;
-	gap: 2px;
-	grid-template-columns: 16px 24px auto auto 1fr;
+.root::before {
+	content: '';
+	position: absolute;
+	left: -1px;
+	top: 12px;
+	bottom: 12px;
+	width: 3px;
+	border-radius: 0 3px 3px 0;
+	background: var(--success);
+}
+.root:focus {
+	outline: none;
+}
+.root:focus-within {
+	border-color: var(--accent-border);
+	box-shadow: var(--focus-ring);
+}
+.rootUnmapped {
+	composes: root;
+}
+.rootUnmapped::before {
+	background: var(--danger);
+}
+
+.head {
+	display: flex;
 	align-items: center;
+	justify-content: space-between;
+	gap: 8px 12px;
+	flex-wrap: wrap;
 }
 .from {
-	composes: option;
-	grid-template-columns: 42px auto auto 1fr;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	color: var(--text);
 }
-.kbd {
-	display: inline-block;
-	align-self: center;
+.status {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-left: auto;
+}
+
+.options {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+	gap: 6px 16px;
+}
+.group {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+
+.option {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 38px;
+	padding: 6px 10px;
+	border: 1px solid transparent;
+	border-radius: var(--radius-sm);
+	background: var(--surface-2);
+	cursor: pointer;
+	font-size: 0.875rem;
+	transition: background-color 120ms, border-color 120ms;
+}
+.option:hover {
+	background: var(--surface-3);
+}
+.optionChecked {
+	composes: option;
+	background: var(--accent-soft);
+	border-color: var(--accent-border);
+}
+.optionChecked:hover {
+	background: var(--accent-soft);
+}
+.optionDisabled {
+	composes: option;
+	cursor: default;
+	background: transparent;
+	border: 1px dashed var(--border);
+	color: var(--text-subtle);
+}
+.optionDisabled:hover {
+	background: transparent;
+}
+.radio {
+	flex: none;
 	width: 16px;
 	height: 16px;
-	line-height: 16px;
-	background: rgba(0.5,0.5,0.5,0.25);
-	text-align: center;
-	border: 1px solid black;
-	font-size: 8px;
-	vertical-align: middle;
+	margin: 0;
+	cursor: inherit;
 }
-.root code {
-	background-color: rgb(231, 231, 231);
-	border: 1px grey solid;
-	padding: 2px;
-	border-radius: 4px;
+.optionLabel {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.url {
+	font-size: 0.8125rem;
+}
+.hint {
+	color: var(--text-subtle);
+}
+
+.score {
+	flex: none;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.75rem;
+	color: var(--text-muted);
+	font-variant-numeric: tabular-nums;
+}
+.scoreTrack {
+	position: relative;
+	width: 40px;
+	height: 4px;
+	border-radius: 999px;
+	background: var(--surface-3);
+	overflow: hidden;
+}
+.optionChecked .scoreTrack {
+	background: var(--accent-border);
+}
+.scoreFill {
+	position: absolute;
+	inset: 0 auto 0 0;
+	border-radius: inherit;
+	background: var(--accent);
+}
+.scoreValue {
+	width: 3ch;
+	text-align: right;
+}
+
+.custom {
+	composes: option;
+	cursor: default;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+.custom:hover {
+	background: var(--surface-2);
+}
+.customChecked {
+	composes: custom;
+	background: var(--accent-soft);
+	border-color: var(--accent-border);
+}
+.customChecked:hover {
+	background: var(--accent-soft);
+}
+.customLabel {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	cursor: pointer;
+}
+.customInput {
+	flex: 1;
+	min-width: 0;
+	height: 30px;
+	padding: 0 10px;
+	border: 1px solid var(--border-strong);
+	border-radius: 6px;
+	background: var(--surface);
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+}
+.customInput::placeholder {
+	color: var(--text-subtle);
+}
+.customInput:focus {
+	outline: none;
+	border-color: var(--accent);
+	box-shadow: var(--focus-ring);
 }
