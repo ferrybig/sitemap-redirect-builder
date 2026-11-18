@@ -1,5 +1,5 @@
 import { useId, useRef } from 'react'
-import {Sitemap as SitemapType } from '../types'
+import { Sitemap as SitemapType } from '../types'
 import classes from './Sitemap.module.css'
 import ui from '../components/ui.module.css'
 import useRunAfterInitialRender from '../hooks/useRunAfterInitialRender';

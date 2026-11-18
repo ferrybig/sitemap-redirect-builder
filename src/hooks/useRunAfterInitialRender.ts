@@ -8,7 +8,7 @@ export function runTasks() {
 	if (list) {
 		const oldList = list;
 		list = null;
-		for(const task of oldList) {
+		for (const task of oldList) {
 			task();
 		}
 	}
