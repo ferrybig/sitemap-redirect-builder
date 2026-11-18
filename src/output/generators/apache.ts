@@ -2,10 +2,13 @@ import { OutputGenerator } from '../../types';
 import src from './apache-svgrepo-com.svg'
 
 function escapeInput(input: string) {
-	return input;
+	// Regex-escape, and strip the leading slash: in .htaccess the pattern
+	// is matched against the path without it
+	return input.replace(/^\//, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 function escapeOutput(input: string) {
-	return input;
+	// $N and %{VAR} are expanded in the substitution
+	return input.replace(/[$%\\]/g, '\\$&');
 }
 
 export default {
@@ -20,9 +23,9 @@ export default {
 			if (replacement.to === null) {
 				config += `RewriteRule ^${escapeInput(replacement.from)}$ - [G,L]\n`;
 			} else if (replacement.to !== undefined) {
-				config += `RewriteRule ^${escapeInput(replacement.from)}$ ${escapeOutput(replacement.from)} [R,L]`;
+				config += `RewriteRule ^${escapeInput(replacement.from)}$ ${escapeOutput(replacement.to)} [R=301,L]\n`;
 			}
 		}
-		return config;
+		return config.length === 0 ? '' : `RewriteEngine On\n${config}`;
 	}
 } satisfies OutputGenerator

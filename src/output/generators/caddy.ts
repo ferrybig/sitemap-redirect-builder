@@ -8,6 +8,10 @@ export default {
 		pos: null,
 	},
 	generateOutput: replacements => {
-		return replacements.map(replacement => replacement.to !== null ? `rewrite ${replacement.from} ${replacement.to}` : `# 410: ${replacement.from}`).join('\n');
+		return replacements.flatMap(replacement => {
+			if (replacement.to === null) return [`respond ${replacement.from} 410`];
+			if (replacement.to === undefined) return [];
+			return [`redir ${replacement.from} ${replacement.to} 301`];
+		}).join('\n');
 	}
 } satisfies OutputGenerator
