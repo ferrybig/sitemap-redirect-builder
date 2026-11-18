@@ -179,7 +179,7 @@ function App() {
 					<a href="https://github.com/ferrybig/sitemap-redirect-builder">ferrybig/sitemap-redirect-builder</a>
 				</p>
 				<p>
-					The icons in the output section come from
+					The icons in the export section come from
 					{' '}
 					<a href="https://github.com/vscode-icons/vscode-icons">vscode-icons/vscode-icons</a>
 					{' '}
