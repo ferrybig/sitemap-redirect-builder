@@ -14,24 +14,24 @@ export default {
 			if (replacement.to === null) {
 				goneMap += `\t${replacement.from} 1;\n`
 			} else if (replacement.to !== undefined) {
-				serverConfig += `from ^${replacement.from}$ ${replacement.to} permanent;\n`
+				const from = replacement.from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+				serverConfig += `rewrite ^${from}$ ${replacement.to} permanent;\n`
 			}
 		}
 		if(goneMap.length === 0) {
 			return serverConfig;
 		} else {
-			return `
+			return `# Goes in the http {} context
 map $uri $is_gone {
 \tdefault 0;
 \t${goneMap.trim()}
 }
-...
-server {
-\tif ($is_gone) {
-\t\treturn 410;
-\t}
-\t${serverConfig.trim().replace('\n', '\n\t')}
+
+# Goes inside your existing server {} block
+if ($is_gone) {
+\treturn 410;
 }
+${serverConfig.trim()}
 `
 		}
 	}
