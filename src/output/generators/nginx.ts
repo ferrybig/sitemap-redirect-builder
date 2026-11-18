@@ -10,8 +10,8 @@ export default {
 	generateOutput: replacements => {
 		let goneMap = '';
 		let serverConfig = '';
-		for(const replacement of replacements) {
-			if(replacement.to === null) {
+		for (const replacement of replacements) {
+			if (replacement.to === null) {
 				goneMap += `\t${replacement.from} 1;\n`
 			} else if (replacement.to !== undefined) {
 				serverConfig += `from ^${replacement.from}$ ${replacement.to} permanent;\n`

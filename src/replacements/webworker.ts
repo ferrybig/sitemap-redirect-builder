@@ -17,12 +17,14 @@ function runFromSchedule() {
 		const res = findBestUrls(oldUrls, newUrl, cache);
 		results.push([newUrl, res])
 	}
-	postMessage({
-		mutationId,
-		results,
-		type: 'results',
-		processed: taskQueueIndex,
-	} satisfies MessageFromWorker)
+	if (results.length > 0) {
+		postMessage({
+			mutationId,
+			results,
+			type: 'results',
+			processed: taskQueueIndex,
+		} satisfies MessageFromWorker)
+	}
 	if (taskQueueIndex < taskQueue.length ) {
 		checkSchedule();
 	}

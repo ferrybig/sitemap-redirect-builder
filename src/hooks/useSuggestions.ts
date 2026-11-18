@@ -3,7 +3,7 @@ import ReplacementSuggestionsContext from '../replacements/ReplacementSuggestion
 
 export default function useSuggestions(from: string) {
 	const context = useContext(ReplacementSuggestionsContext);
-	if(!context) throw new Error('Context missing');
+	if (!context) throw new Error('Context missing');
 	const select = () => context.getSuggestionsForUrl(from);
 	return useSyncExternalStore(context.onUpdate, select, select)
 }

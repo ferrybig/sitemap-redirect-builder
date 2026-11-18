@@ -36,8 +36,8 @@
 	<rect x="220" y="125" width="160" height="20" fill="hsl(150, 90%, 30%)" />
 	<rect x="220" y="160" width="160" height="20" fill="hsl(150, 90%, 10%)" />
 
-	<rect x="30" y="270" width="140" height="20" fill="hsl(150, 90%, 40%)" />
-	<rect x="30" y="310" width="140" height="20" fill="hsl(150, 90%, 60%)" />
+	<rect x="20" y="270" width="140" height="20" fill="hsl(150, 90%, 40%)" />
+	<rect x="20" y="310" width="140" height="20" fill="hsl(150, 90%, 60%)" />
 
 	<rect x="220" y="270" width="60" height="20" fill="hsl(150, 90%, 40%)" />
 	<rect x="220" y="310" width="60" height="20" fill="hsl(150, 90%, 60%)" />

@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef } from 'react'
-import {Sitemap as SitemapType } from '../types'
+import { useId, useRef } from 'react'
+import { Sitemap as SitemapType } from '../types'
 import classes from './Sitemap.module.css'
 import LinkButton from '../components/LinkButton'
 import useRunAfterInitialRender from '../hooks/useRunAfterInitialRender';
