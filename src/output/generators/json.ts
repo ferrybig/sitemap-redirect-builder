@@ -3,6 +3,7 @@ import src from './json-svgrepo-com.svg'
 
 export default {
 	name: 'Json (debug)',
+	fileName: 'redirects.json',
 	image: {
 		src,
 		pos: null
